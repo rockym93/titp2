@@ -1,13 +1,37 @@
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-<title>Inverse Timetable Project</title>
+    <title>Add or modify availabilities</title>
+    <link rel="stylesheet" href="/style.css" type="text/css" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 </head>
+
 <body>
+<div class="header">
+    <h1>rockym93<span> dot net</span></h1>
+    <div>
+    <ul class="links">
+        <li><a href="/">index</a></li>
+<li><a href="http://blog.rockym93.net/">blog</a></li>
+<li><a href="/text">text</a></li>
+<li id="current"><a href="/code">code</a></li>
+<li><a href="/misc">misc</a></li>
+
+    </ul>
+    </div>
+</div>
+
+<div class="content">
+<h3>Add or modify availabilities</h3>
 <p><strong>This is the Inverse Timetable Project.</strong></p>
+
 <p><em>What to do:</em> Have a look at your uni timetable. See all the spots between lectures, when you're (theoretically) free to socialise? Write those down. Then, put them into the form below and hit submit, and they'll be stored so other people can tell when you're free.</p>
+
 <form method="post" action="titp_write.py">
-<table>
+<p>
+<table border=1 style="margin-left:1em">
 <tr>
 <td></td>
 <td>Monday</td>
@@ -105,8 +129,16 @@ I solemnly sear that I am not a spambot.<br />
 <input type="text" name="captcha" />
 </p>
 <p>
-<input type="submit" />
+<input value="Submit" type="submit" />
+</p>
 </p>
 </form>
+</div>
+
+<div class="footer">
+    &copy; Rockwell McGellin. Last updated 23 February 2015.
+    <span style="float:right">Valid XHTML+CSS.</span>
+</div>
+
 </body>
 </html>
