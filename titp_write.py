@@ -6,9 +6,9 @@ import string
 import json
 cgitb.enable()
 
-print("Content-Type: text/html")
-print()
-print("<html><body>")
+print('Content-Type: text/html')
+print('')
+print('<html><body>')
 
 #Big important data sets go here.
 days = ('Monday','Tuesday','Wednesday','Thursday','Friday') #For ordering purposes
@@ -17,7 +17,7 @@ times = {8:[],9:[],10:[],11:[],12:[],13:[],14:[],15:[],16:[],17:[],18:[]}
 try:
 	with open('timetable.json') as f:
 		tt = json.load(f)
-except FileNotFoundError:
+except IOError:
 	tt = {'Monday':times,'Tuesday':times,'Wednesday':times,'Thursday':times,'Friday':times,'users':[]}
 
 
@@ -27,10 +27,10 @@ def clearname(name):
 		for h in range(8,19):
 			if name in tt[d][h]:
 				tt[d][h].remove(name)
-	if name in tt[users]:
-		tt[users].remove(name)
+	if name in tt['users']:
+		tt['users'].remove(name)
 			
-def checks():
+def checks(name, captcha):
 	'''Check that CAPTCHA is correct and inputs are safe.'''
 	for i in name:
 		if i not in string.letters:
@@ -42,10 +42,11 @@ def checks():
 
 def processform(): #This collects the data from the form (add.html)
 	form = cgi.FieldStorage()
+	print(form)
 	name = str(form.getvalue('name'))
 	captcha = str(form.getvalue('captcha'))
 	
-	if checks():
+	if checks(name, captcha):
 		clearname(name)
 		
 		for d in days:
@@ -53,14 +54,14 @@ def processform(): #This collects the data from the form (add.html)
 				if str(d + str(h)) in form:
 					tt[d][h].append(name)
 		
-		tt[users].append(name)
+		tt['users'].append(name)
 	else:
 		print('Sorry, something bad happened. Check that you answered the spambot question and that your name contains only letters, and try again.')
 
 
 def generate(): #Builds the timetable for all users.
 	s = str()
-	s +=  'Currently tracking ' + str(len(tt[users])) + ' people\'s avaliability between classes.\n\n'
+	s +=  'Currently tracking ' + str(len(tt['users'])) + ' people\'s avaliability between classes.\n\n'
 	s +=  '<table border=1>\n<tr><td></td><td>Monday</td><td>Tuesday</td><td>Wednesday</td><td>Thursday</td><td>Friday</td>\n'
 	
 	for h in range(8,19):
