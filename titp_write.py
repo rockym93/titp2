@@ -1,146 +1,88 @@
 #!/usr/bin/env python
-VERSION = "0.8.2"
-import sys
-import os
+VERSION = "2.0"
 import cgi
 import cgitb
-import shutil
 import string
+import json
 cgitb.enable()
 
-print "Content-Type: text/html"
-print
-print "<html><body>"
+print("Content-Type: text/html")
+print()
+print("<html><body>")
 
 #Big important data sets go here.
-form = cgi.FieldStorage()
-DAYS = ('MO','TU','WE','TH','FR')
-TIMES = ('8','9','10','11','12','13','14','15','16','17','18')
-HUMANDAYS = {'MO':'Monday','TU':'Tuesday','WE':'Wednesday','TH':'Thursday','FR':'Friday'}
-USERNAME = str(form.getvalue("username"))
-REALNAME = str(form.getvalue("realname"))
-CAPTCHA = str(form.getvalue("captcha"))
-CAL = dict()
-CLH = ['TU13','FR13'] #Common lunch hours
+days = ('Monday','Tuesday','Wednesday','Thursday','Friday') #For ordering purposes
+times = {8:[],9:[],10:[],11:[],12:[],13:[],14:[],15:[],16:[],17:[],18:[]}
 
-#Set up the main dict with list objects for each day and time.
-for day in DAYS:
-	for time in TIMES:
-		CAL[day+time] = list()
+try:
+	with open('timetable.json') as f:
+		tt = json.load(f)
+except FileNotFoundError:
+	tt = {'Monday':times,'Tuesday':times,'Wednesday':times,'Thursday':times,'Friday':times,'users':[]}
 
-def setupfiles(): #This blanks the user directory and sets up the day/time files again
-	if os.path.exists('data/' + USERNAME):
-		shutil.rmtree('data/' + USERNAME)
-	os.mkdir('data/' + USERNAME)
-	for day in DAYS:
-		os.mkdir('data/' + USERNAME + '/' + day)
-		for time in TIMES:
-			f = open('data/' + USERNAME + '/' + day + '/' + time,'w')
-			f.close()
+
+def clearname(name):
+	'''Removes a name from the timetable'''
+	for d in days:
+		for h in range(8,19):
+			if name in tt[d][h]:
+				tt[d][h].remove(name)
+	if name in tt[users]:
+		tt[users].remove(name)
 			
-def processform(): #This collects the data from the form (add.html) and writes it to disk
-	for day in DAYS:
-		for time in TIMES:
-			if str(day + time) in form:
-				f = open('data/' + USERNAME + '/' + day + '/' + time, 'w')
-				f.write(USERNAME)
-				f.close()
-	usrfile = open('data/' + USERNAME + '/' + 'name','w')
-	usrfile.write(REALNAME)
-	usrfile.close()
-
-def generatetimetable(): #This builds the per-user timetable.
-	tt = '<table border=1><tr><td></td><td>8AM</td><td>9AM</td><td>10AM</td><td>11AM</td><td>12PM</td><td>1PM</td><td>2PM</td><td>3PM</td><td>4PM</td><td>5PM</td><td>6PM</td></tr>'
-	for day in DAYS:
-		tt = tt + "<tr><td>"
-		tt = tt + HUMANDAYS[day]
-		tt = tt + "</td>"
-		for time in TIMES:
-			tt = tt + "<td>"
-			if str(day + time) in form:
-				tt = tt + USERNAME + '<br>'
-			tt = tt + "</td>"
-		tt = tt + "</tr>"
-	tt = tt + "</table>"
-	return tt
-
-def indexfilemake(): #This writes the per-user timetable to disk.
-	indexfile = open('data/' + USERNAME + '/' + 'index.html','w')
-#	indexdata = '<html><head><title>' + REALNAME + '</title></head><body><h3>' + REALNAME + ' - ' + USERNAME + '</h3><p><b>Preferred location:</b> ' + form.getvalue("location") + '</p><p><b>Other stuff:</b>' + form.getvalue("details") + '</p><p>' + generatetimetable() + '</p></body></html>'
-	indexdata = '<html><head><title>' + REALNAME + '</title></head><body><h3>' + REALNAME + ' - ' + USERNAME + '<p>' + generatetimetable() + '</p></body></html>'
-	indexfile.write(indexdata)
-	indexfile.close()
-	print indexdata
-
-USERS = os.listdir('data')
-
-def checks(): #Check the CAPTCHA and check that the inputs are safe
-	for i in USERNAME:
+def checks():
+	'''Check that CAPTCHA is correct and inputs are safe.'''
+	for i in name:
 		if i not in string.letters:
 			return False
-	if CAPTCHA != 'apple' and CAPTCHA != 'rebuild':
+	if captcha != 'apple':
 		return False
-	for i in REALNAME:
-		if i not in str(string.letters + string.digits + " " + 
-"-"):
-			return False
 	else:
 		return True
+
+def processform(): #This collects the data from the form (add.html)
+	form = cgi.FieldStorage()
+	name = str(form.getvalue('name'))
+	captcha = str(form.getvalue('captcha'))
 	
-
-def slurp(): #Pardon my whimsical function name. This collects all the *other* users' data
-	for user in USERS:
-		for day in DAYS:
-			for time in TIMES:
-				f = open('data/' + user + '/' + day + '/' + time)
-				CAL[day+time].append(f.read())
-				f.close()
-
-def spit(): #Builds the timetable for all users.
-	s = str()
-	s = s +  'Currently tracking ' + str(len(USERS)) + ' people\'s avaliability between classes.'
-	s = s +  '<table border=1><tr><td></td><td>8AM</td><td>9AM</td><td>10AM</td><td>11AM</td><td>12PM</td><td>1PM</td><td>2PM</td><td>3PM</td><td>4PM</td><td>5PM</td><td>6PM</td></tr>'
-	
-	for day in DAYS:
-		s = s +  "<tr><td>"
-		s = s +  HUMANDAYS[day]
-		s = s +  "</td>"
-		for time in TIMES:
-			s = s +  "<td"
-			if day+time in CLH:
-				s = s + ' style="background-color:#99FF99"'
-			s = s + ">"
-			for entry in CAL[day+time]:
-				if entry:
-					s = s +  entry + '<br>'
-			s = s +  "</td>"
-		s = s +  "</tr>"
-	s = s +  "</table>"
-
-	s = s +  '<br>Key:'
-	for user in USERS:
-		s = s +  "<br>"
-		f = open('data/' + user + '/name')
-		s = s +  '<a href=data/' + user + '>' + user + '</a> - '
-		s = s +  f.read()
-		f.close()
-
-	s = s +  '<br><br>Generated by TITP Version ' + VERSION
-	mainindex = open("tt.html","w")
-	mainindex.write(s)
-	mainindex.close()
+	if checks():
+		clearname(name)
 		
-if checks():
-	if CAPTCHA != "rebuild":
-		setupfiles()		
-		processform()
-		indexfilemake()
-	USERS = os.listdir('data')
-	slurp()
-	spit()
-	print "Data stored. Probably.<br>"
-	print '<a href="index.shtml">Back</a> &middot;'
-	print '<a href="add.html">Edit</a>'
-	print "</body></html>"
-else:
-	print '<a href="add.html"><img src="moron.png"></a>'
+		for d in days:
+			for h in range(8,19):
+				if str(d + str(h)) in form:
+					tt[d][h].append(name)
+		
+		tt[users].append(name)
+	else:
+		print('Sorry, something bad happened. Check that you answered the spambot question and that your name contains only letters, and try again.')
+
+
+def generate(): #Builds the timetable for all users.
+	s = str()
+	s +=  'Currently tracking ' + str(len(tt[users])) + ' people\'s avaliability between classes.\n\n'
+	s +=  '<table border=1>\n<tr><td></td><td>Monday</td><td>Tuesday</td><td>Wednesday</td><td>Thursday</td><td>Friday</td>\n'
+	
+	for h in range(8,19):
+		s +=  "<tr><td>" + str(h) + '</td>'
+		for d in days:
+			s += '<td>'
+			for i in tt[d][h]:
+				s += i + '<br />'
+			s += '</td>'
+		s += '</tr>\n'
+
+	s +=  '<br><br>Generated by TITP Version ' + VERSION
+	index = open('index.txt','w')
+	index.write(s)
+	index.close()
+
+def save():
+	with open('timetable.json','w') as f:
+		json.dump(tt,f)
+		
+if __name__ == '__main__':
+	processform()
+	generate()
+	save()
+	print('Data stored. Probably.')

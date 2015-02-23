@@ -1,120 +1,112 @@
-<html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Inverse Timetable Project</title>
 </head>
 <body>
-<b>This is the Inverse Timetable Project.</b><br><i>What to do:</i> Have a look at your uni timetable. See all the spots between lectures, when you're (theoretically) free to socialise? Write those down. Then, put them into the form below and hit submit, and they'll be stored so other people can tell when you're free. <br>
-<form method="POST" action="titp_write.py">
-<table border=1>
+<p><strong>This is the Inverse Timetable Project.</strong></p>
+<p><em>What to do:</em> Have a look at your uni timetable. See all the spots between lectures, when you're (theoretically) free to socialise? Write those down. Then, put them into the form below and hit submit, and they'll be stored so other people can tell when you're free.</p>
+<form method="post" action="titp_write.py">
+<table>
 <tr>
 <td></td>
-<td>8AM</td>
-<td>9AM</td>
-<td>10AM</td>
-<td>11AM</td>
-<td>12PM</td>
-<td>1PM</td>
-<td>2PM</td>
-<td>3PM</td>
-<td>4PM</td>
-<td>5PM</td>
-<td>6PM</td>
-</tr>
-<tr>
 <td>Monday</td>
-<td><input type="checkbox" name="MO8" value="true"></td>
-<td><input type="checkbox" name="MO9" value="true"></td>
-<td><input type="checkbox" name="MO10" value="true"></td>
-<td><input type="checkbox" name="MO11" value="true"></td>
-<td><input type="checkbox" name="MO12" value="true"></td>
-<td><input type="checkbox" name="MO13" value="true"></td>
-<td><input type="checkbox" name="MO14" value="true"></td>
-<td><input type="checkbox" name="MO15" value="true"></td>
-<td><input type="checkbox" name="MO16" value="true"></td>
-<td><input type="checkbox" name="MO17" value="true"></td>
-<td><input type="checkbox" name="MO18" value="true"></td>
-</tr>
-<tr>
 <td>Tuesday</td>
-<td><input type="checkbox" name="TU8" value="true"></td>
-<td><input type="checkbox" name="TU9" value="true"></td>
-<td><input type="checkbox" name="TU10" value="true"></td>
-<td><input type="checkbox" name="TU11" value="true"></td>
-<td><input type="checkbox" name="TU12" value="true"></td>
-<td><input type="checkbox" name="TU13" value="true"></td>
-<td><input type="checkbox" name="TU14" value="true"></td>
-<td><input type="checkbox" name="TU15" value="true"></td>
-<td><input type="checkbox" name="TU16" value="true"></td>
-<td><input type="checkbox" name="TU17" value="true"></td>
-<td><input type="checkbox" name="TU18" value="true"></td>
-</tr>
-<tr>
 <td>Wednesday</td>
-<td><input type="checkbox" name="WE8" value="true"></td>
-<td><input type="checkbox" name="WE9" value="true"></td>
-<td><input type="checkbox" name="WE10" value="true"></td>
-<td><input type="checkbox" name="WE11" value="true"></td>
-<td><input type="checkbox" name="WE12" value="true"></td>
-<td><input type="checkbox" name="WE13" value="true"></td>
-<td><input type="checkbox" name="WE14" value="true"></td>
-<td><input type="checkbox" name="WE15" value="true"></td>
-<td><input type="checkbox" name="WE16" value="true"></td>
-<td><input type="checkbox" name="WE17" value="true"></td>
-<td><input type="checkbox" name="WE18" value="true"></td>
-</tr>
-<tr>
 <td>Thursday</td>
-<td><input type="checkbox" name="TH8" value="true"></td>
-<td><input type="checkbox" name="TH9" value="true"></td>
-<td><input type="checkbox" name="TH10" value="true"></td>
-<td><input type="checkbox" name="TH11" value="true"></td>
-<td><input type="checkbox" name="TH12" value="true"></td>
-<td><input type="checkbox" name="TH13" value="true"></td>
-<td><input type="checkbox" name="TH14" value="true"></td>
-<td><input type="checkbox" name="TH15" value="true"></td>
-<td><input type="checkbox" name="TH16" value="true"></td>
-<td><input type="checkbox" name="TH17" value="true"></td>
-<td><input type="checkbox" name="TH18" value="true"></td>
+<td>Friday</td>
 </tr>
 <tr>
-<td>Friday</td>
-<td><input type="checkbox" name="FR8" value="true"></td>
-<td><input type="checkbox" name="FR9" value="true"></td>
-<td><input type="checkbox" name="FR10" value="true"></td>
-<td><input type="checkbox" name="FR11" value="true"></td>
-<td><input type="checkbox" name="FR12" value="true"></td>
-<td><input type="checkbox" name="FR13" value="true"></td>
-<td><input type="checkbox" name="FR14" value="true"></td>
-<td><input type="checkbox" name="FR15" value="true"></td>
-<td><input type="checkbox" name="FR16" value="true"></td>
-<td><input type="checkbox" name="FR17" value="true"></td>
-<td><input type="checkbox" name="FR18" value="true"></td>
+<td>8</td>
+<td><input type="checkbox" name="Monday8" value="true" /></td>
+<td><input type="checkbox" name="Tuesday8" value="true" /></td>
+<td><input type="checkbox" name="Wednesday8" value="true" /></td>
+<td><input type="checkbox" name="Thursday8" value="true" /></td>
+<td><input type="checkbox" name="Friday8" value="true" /></td>
+</tr><tr>
+<td>9</td>
+<td><input type="checkbox" name="Monday9" value="true" /></td>
+<td><input type="checkbox" name="Tuesday9" value="true" /></td>
+<td><input type="checkbox" name="Wednesday9" value="true" /></td>
+<td><input type="checkbox" name="Thursday9" value="true" /></td>
+<td><input type="checkbox" name="Friday9" value="true" /></td>
+</tr><tr>
+<td>10</td>
+<td><input type="checkbox" name="Monday10" value="true" /></td>
+<td><input type="checkbox" name="Tuesday10" value="true" /></td>
+<td><input type="checkbox" name="Wednesday10" value="true" /></td>
+<td><input type="checkbox" name="Thursday10" value="true" /></td>
+<td><input type="checkbox" name="Friday10" value="true" /></td>
+</tr><tr>
+<td>11</td>
+<td><input type="checkbox" name="Monday11" value="true" /></td>
+<td><input type="checkbox" name="Tuesday11" value="true" /></td>
+<td><input type="checkbox" name="Wednesday11" value="true" /></td>
+<td><input type="checkbox" name="Thursday11" value="true" /></td>
+<td><input type="checkbox" name="Friday11" value="true" /></td>
+</tr><tr>
+<td>12</td>
+<td><input type="checkbox" name="Monday12" value="true" /></td>
+<td><input type="checkbox" name="Tuesday12" value="true" /></td>
+<td><input type="checkbox" name="Wednesday12" value="true" /></td>
+<td><input type="checkbox" name="Thursday12" value="true" /></td>
+<td><input type="checkbox" name="Friday12" value="true" /></td>
+</tr><tr>
+<td>13</td>
+<td><input type="checkbox" name="Monday13" value="true" /></td>
+<td><input type="checkbox" name="Tuesday13" value="true" /></td>
+<td><input type="checkbox" name="Wednesday13" value="true" /></td>
+<td><input type="checkbox" name="Thursday13" value="true" /></td>
+<td><input type="checkbox" name="Friday13" value="true" /></td>
+</tr><tr>
+<td>14</td>
+<td><input type="checkbox" name="Monday14" value="true" /></td>
+<td><input type="checkbox" name="Tuesday14" value="true" /></td>
+<td><input type="checkbox" name="Wednesday14" value="true" /></td>
+<td><input type="checkbox" name="Thursday14" value="true" /></td>
+<td><input type="checkbox" name="Friday14" value="true" /></td>
+</tr><tr>
+<td>15</td>
+<td><input type="checkbox" name="Monday15" value="true" /></td>
+<td><input type="checkbox" name="Tuesday15" value="true" /></td>
+<td><input type="checkbox" name="Wednesday15" value="true" /></td>
+<td><input type="checkbox" name="Thursday15" value="true" /></td>
+<td><input type="checkbox" name="Friday15" value="true" /></td>
+</tr><tr>
+<td>16</td>
+<td><input type="checkbox" name="Monday16" value="true" /></td>
+<td><input type="checkbox" name="Tuesday16" value="true" /></td>
+<td><input type="checkbox" name="Wednesday16" value="true" /></td>
+<td><input type="checkbox" name="Thursday16" value="true" /></td>
+<td><input type="checkbox" name="Friday16" value="true" /></td>
+</tr><tr>
+<td>17</td>
+<td><input type="checkbox" name="Monday17" value="true" /></td>
+<td><input type="checkbox" name="Tuesday17" value="true" /></td>
+<td><input type="checkbox" name="Wednesday17" value="true" /></td>
+<td><input type="checkbox" name="Thursday17" value="true" /></td>
+<td><input type="checkbox" name="Friday17" value="true" /></td>
+</tr><tr>
+<td>18</td>
+<td><input type="checkbox" name="Monday18" value="true" /></td>
+<td><input type="checkbox" name="Tuesday18" value="true" /></td>
+<td><input type="checkbox" name="Wednesday18" value="true" /></td>
+<td><input type="checkbox" name="Thursday18" value="true" /></td>
+<td><input type="checkbox" name="Friday18" value="true" /></td>
 </tr>
 </table>
+<p>
 Your first name:
-<input type="text" name="realname">
-<br>
-Your TLA:<input type="text" name="username" maxlength=3>
-<br>
-Your TLA (Three letter acronym) should be unique and memorable, and consist <i>only</i> of letters. <br>This is what is shown in the actual timetable, with a key below. <br>If you make any mistakes, just redo the form with the same TLA. (It's case sensitive, so check that to avoid dupes.)
-<br><br>
-I solemnly sear that I am not a spambot.
-<br>
-<img src="captcha.png"><br>
-<input type="text" name="captcha">
-<br>
-<br>
-
-<!--
-Preferred location:<br>
-<input type="text" name="location">
-<br>
-Extra details:<br><textarea rows="8" cols="32" name="details"></textarea>
-<br>
-Sina wanted a way to add conditions to the timetable, for stuff like labs which are every second week. 
-<br>That is difficult to implement.
-<br>Instead, here is a general purpose box which you can write conditions like that.
--->
-<input type="submit">
+<input type="text" name="realname" />
+</p>
+<p>
+I solemnly sear that I am not a spambot.<br />
+<img src="captcha.png" alt="apple"/><br />
+<input type="text" name="captcha" />
+</p>
+<p>
+<input type="submit" />
+</p>
+</form>
 </body>
 </html>
