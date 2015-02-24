@@ -63,7 +63,7 @@ def processform(): #This collects the data from the form (add.html)
 
 def generate(): #Builds the timetable for all users.
 	s = str()
-	s +=  '<p>Currently tracking ' + str(len(tt['users'])) + ' people\'s avaliability between classes.</p>\n\n'
+	s +=  '<p>Currently tracking ' + str(len(tt['users'])) + ' people\'s availability between classes.</p>\n\n'
 	s +=  '<p><table style="margin-left:1em" border=1>\n<tr><td></td><td>Monday</td><td>Tuesday</td><td>Wednesday</td><td>Thursday</td><td>Friday</td>\n'
 	
 	for h in times:
