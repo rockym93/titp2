@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import titp_write
+import titp_write as titp
 import cgi
 import time
 
@@ -19,7 +19,7 @@ daynow = time.strftime('%A', timenow)
 hournow = time.strftime('%H', timenow)
 
 for i in names:
-	if i in titp.write.tt[daynow][timenow]:
-		titp.write.tt[daynow][timenow].remove(i)
-	titp_write.tt[daynow][timenow].append(name)
-titp_write.generate()
+	if i in titp.tt[daynow][timenow]:
+		titp.tt[daynow][timenow].remove(i)
+	titp.tt[daynow][timenow].append(name)
+titp.generate()
