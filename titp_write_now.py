@@ -19,7 +19,7 @@ daynow = time.strftime('%A', timenow)
 hournow = time.strftime('%H', timenow)
 
 for i in names:
-	if i in titp.tt[daynow][timenow]:
-		titp.tt[daynow][timenow].remove(i)
-	titp.tt[daynow][timenow].append(name)
+	if i in titp.tt[daynow][hournow]:
+		titp.tt[daynow][hournow].remove(i)
+	titp.tt[daynow][hournow].append(name)
 titp.generate()
