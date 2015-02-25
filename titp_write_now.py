@@ -21,5 +21,8 @@ hournow = time.strftime('%H', timenow)
 for i in names:
 	if i in titp.tt[daynow][hournow]:
 		titp.tt[daynow][hournow].remove(i)
-	titp.tt[daynow][hournow].append(name)
+	titp.tt[daynow][hournow].append(i)
 titp.generate()
+
+with open('now.list','w') as f:
+	f.writelines(names)
