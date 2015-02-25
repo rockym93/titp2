@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-VERSION = "2.0"
+VERSION = "2.1"
 import cgi
 import cgitb
 import string
