@@ -25,4 +25,7 @@ for i in names:
 titp.generate()
 
 with open('now.list','w') as f:
-	f.write(line + '\n' for line in names)
+	s = ''
+	for name in names:
+		s += name + '\n'
+	f.write(s)
