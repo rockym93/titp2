@@ -16,3 +16,7 @@ hournow = str(int(time.strftime('%H', timenow))) #We don't want the zero at the 
 
 for i in tt[daynow][hournow]:
 	print(i)
+
+with open('now.list') as f:
+	for i in f:
+		print i
