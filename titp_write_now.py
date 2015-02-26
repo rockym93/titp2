@@ -16,7 +16,7 @@ names.append(query.getvalue('name'))
 timenow = time.gmtime(time.time() + 28800)
 
 daynow = time.strftime('%A', timenow)
-hournow = time.strftime('%H', timenow)
+hournow = str(int(time.strftime('%H', timenow))) #We don't want the zero at the front.
 
 for i in names:
 	if i in titp.tt[daynow][hournow]:

@@ -12,7 +12,7 @@ with open('timetable.json') as f:
 timenow = time.gmtime(time.time() + 28800)
 
 daynow = time.strftime('%A', timenow)
-hournow = time.strftime('%H', timenow)
+hournow = str(int(time.strftime('%H', timenow))) #We don't want the zero at the front.
 
 for i in tt[daynow][hournow]:
 	print(i)
