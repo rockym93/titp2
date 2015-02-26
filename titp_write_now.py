@@ -11,7 +11,8 @@ except IOError:
 	names = []
 
 query = cgi.FieldStorage()
-names.append(query.getvalue('name'))
+if query.getvalue('name') not in names: #Avoid duplicates
+	names.append(query.getvalue('name')) 
 
 timenow = time.gmtime(time.time() + 28800)
 
