@@ -27,7 +27,6 @@ except IOError:
 if 'tz' not in tt.keys():
 	tt['tz'] = 0
 	#Defaults to GMT, you'll have to change this in the JSON. Sorry.
-	save()
 
 def clearname(name):
 	'''Removes a name from the timetable'''
@@ -129,7 +128,7 @@ def save():
 	'''Saves internal timetable state.'''
 	with open('timetable.json','w') as f:
 		json.dump(tt,f)
-		
+
 if __name__ == '__main__':
 	processform()
 	generate()
