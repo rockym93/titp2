@@ -46,20 +46,21 @@ def checks(name, captcha):
 def processform(): 
 	'''This collects the data from the form (add.html)'''
 	form = cgi.FieldStorage()
-	name = str(form.getvalue('name'))
-	captcha = str(form.getvalue('captcha'))
-	
-	if checks(name, captcha):
-		clearname(name)
+	if form:
+		name = str(form.getvalue('name'))
+		captcha = str(form.getvalue('captcha'))
 		
-		for d in days:
-			for h in times:
-				if form.getvalue(d + h):
-					tt[d][h].append(name)
+		if checks(name, captcha):
+			clearname(name)
+			
+			for d in days:
+				for h in times:
+					if form.getvalue(d + h):
+						tt[d][h].append(name)
 
-		tt['users'].append(name)
-	else:
-		print('Sorry, something bad happened. Check that you answered the spambot question and that your name contains only letters, and try again.')
+			tt['users'].append(name)
+		else:
+			print('Sorry, something bad happened. Check that you answered the spambot question and that your name contains only letters, and try again.')
 
 
 def generate(): 
@@ -82,9 +83,8 @@ def generate():
 	with open('page.html') as f:
 		page = f.read()
 	
-	index = open('index.html','w')
-	index.write(page.replace('<!--timetable-->',s))
-	index.close()
+	print(page.replace('<!--timetable-->',s))
+
 
 def save():
 	'''Saves internal timetable state.'''
@@ -95,4 +95,4 @@ if __name__ == '__main__':
 	processform()
 	generate()
 	save()
-	print('Data stored. Probably.')
+
