@@ -43,7 +43,8 @@ def checks(name, captcha):
 	else:
 		return True
 
-def processform(): #This collects the data from the form (add.html)
+def processform(): 
+	'''This collects the data from the form (add.html)'''
 	form = cgi.FieldStorage()
 	name = str(form.getvalue('name'))
 	captcha = str(form.getvalue('captcha'))
@@ -61,7 +62,8 @@ def processform(): #This collects the data from the form (add.html)
 		print('Sorry, something bad happened. Check that you answered the spambot question and that your name contains only letters, and try again.')
 
 
-def generate(): #Builds the timetable for all users.
+def generate(): 
+	'''Builds the timetable html for all users.'''
 	s = str()
 	s +=  '<p>Currently tracking ' + str(len(tt['users'])) + ' people\'s availability between classes.</p>\n\n'
 	s +=  '<div style="padding:1em"><table style="width:100%" border="1">\n<tr><td></td><td>Monday</td><td>Tuesday</td><td>Wednesday</td><td>Thursday</td><td>Friday</td></tr>\n'
@@ -85,6 +87,7 @@ def generate(): #Builds the timetable for all users.
 	index.close()
 
 def save():
+	'''Saves internal timetable state.'''
 	with open('timetable.json','w') as f:
 		json.dump(tt,f)
 		
