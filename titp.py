@@ -27,6 +27,7 @@ except IOError:
 if 'tz' not in tt.keys():
 	tt['tz'] = 0
 	#Defaults to GMT, you'll have to change this in the JSON. Sorry.
+	save()
 
 def clearname(name):
 	'''Removes a name from the timetable'''
@@ -78,9 +79,10 @@ def freenow(name):
 	
 	if name not in tt['users']:
 		tt['users'].append(name)
-	
-	if name not in tt[daynow][hournow]:
-		tt[daynow][hournow].append(name)
+		
+	if daynow in days and hournow in times:	
+		if name not in tt[daynow][hournow]:
+			tt[daynow][hournow].append(name)
 		
 def busynow(name):
 	'''Removes a name from the timetable for right now.'''
@@ -88,8 +90,9 @@ def busynow(name):
 	daynow = time.strftime('%A', timenow)
 	hournow = str(int(time.strftime('%H', timenow))) #We don't want the zero at the front.
 	
-	if name in tt[daynow][hournow]:
-		tt[daynow][hournow].remove(name)
+	if daynow in days and hournow in times:	
+		if name in tt[daynow][hournow]:
+			tt[daynow][hournow].remove(name)
 
 def getnow():
 	'''Gets who's free right now'''
