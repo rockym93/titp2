@@ -23,7 +23,10 @@ except IOError:
 		tt[d] = {}
 		for h in times:
 			tt[d][h] = []
-
+			
+if 'tz' not in tt.keys():
+	tt['tz'] = 0
+	#Defaults to GMT, you'll have to change this in the JSON. Sorry.
 
 def clearname(name):
 	'''Removes a name from the timetable'''
