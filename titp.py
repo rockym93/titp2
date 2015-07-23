@@ -4,6 +4,7 @@ import cgi
 import cgitb
 import string
 import json
+import time
 cgitb.enable()
 
 print('Content-Type: text/html')
@@ -46,22 +47,54 @@ def checks(name, captcha):
 def processform(): 
 	'''This collects the data from the form (add.html)'''
 	form = cgi.FieldStorage()
-	if form:
-		name = str(form.getvalue('name'))
-		captcha = str(form.getvalue('captcha'))
-		
-		if checks(name, captcha):
-			clearname(name)
+	now = form.getvalue('now')
+	if now is not None:
+		freenow(now)
+	else:
+		if form:
+			name = str(form.getvalue('name'))
+			captcha = str(form.getvalue('captcha'))
 			
-			for d in days:
-				for h in times:
-					if form.getvalue(d + h):
-						tt[d][h].append(name)
+			if checks(name, captcha):
+				clearname(name)
+				
+				for d in days:
+					for h in times:
+						if form.getvalue(d + h):
+							tt[d][h].append(name)
 
-			tt['users'].append(name)
-		else:
-			print('Sorry, something bad happened. Check that you answered the spambot question and that your name contains only letters, and try again.')
+				tt['users'].append(name)
+			else:
+				print('Sorry, something bad happened. Check that you answered the spambot question and that your name contains only letters, and try again.')
 
+def freenow(name):
+	'''Adds a name to the timetable for right now.'''
+	timenow = time.gmtime(time.time() + tt['tz'] * 3600)
+	daynow = time.strftime('%A', timenow)
+	hournow = str(int(time.strftime('%H', timenow))) #We don't want the zero at the front.
+	
+	if name not in tt['users']:
+		tt['users'].append(name)
+	
+	if name not in tt[daynow][hournow]:
+		tt[daynow][hournow].append(name)
+		
+def busynow(name):
+	'''Removes a name from the timetable for right now.'''
+	timenow = time.gmtime(time.time() + tt['tz'] * 3600)
+	daynow = time.strftime('%A', timenow)
+	hournow = str(int(time.strftime('%H', timenow))) #We don't want the zero at the front.
+	
+	if name in tt[daynow][hournow]:
+		tt[daynow][hournow].remove(name)
+
+def getnow():
+	'''Gets who's free right now'''
+	timenow = time.gmtime(time.time() + tt['tz'] * 3600)
+	daynow = time.strftime('%A', timenow)
+	hournow = str(int(time.strftime('%H', timenow))) #We don't want the zero at the front.
+	
+	return tt[daynow][hournow]
 
 def generate(): 
 	'''Builds the timetable html for all users.'''
