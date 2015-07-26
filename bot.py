@@ -23,8 +23,9 @@ except IOError:
 
 bot.key = config['key']
 
-with open('bot.json','w') as f:
-	json.dump(config, f)
+def save_config():
+	with open('bot.json','w') as f:
+		json.dump(config, f)
 	
 ### Command Definitions ###
 
@@ -41,10 +42,11 @@ def start(message):
 		if firstname not in titp.tt['users']:
 			t += "It also looks like you're a new TITP user\n"
 			t += "If you're already using TITP on the web, you can fix this by typing /callme, followed by the name you use on TITP."
-			titp.tt['users'].append(firstname)
 	send = { 'text': t, 'chat_id': from_id }
 	bot.api('sendMessage', send)
+	
 	titp.save()
+	save_config()
 
 bot.commands['/start'] = start
 
@@ -56,6 +58,8 @@ def callme(message):
 	send = { 'text': 'Okay, ' + newname + ' it is.', 'chat_id': from_id }
 	bot.api('sendMessage', send)
 	
+	save_config()
+	
 bot.commands['/callme'] = callme
 
 def now(message):
@@ -63,7 +67,7 @@ def now(message):
 	free = titp.getnow()
 	if len(free) == 0:
 		t = "Nobody is free right now."
-	if len(free) == 1:
+	elif len(free) == 1:
 		t = free[0] + " is free right now."
 	else:
 		t = ""
