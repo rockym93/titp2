@@ -23,8 +23,6 @@ except IOError:
 
 bot.key = config['key']
 
-bot.processupdate(data)
-
 with open('bot.json','w') as f:
 	json.dump(config, f)
 	
@@ -127,3 +125,7 @@ I am a bit of a beta! Please report bugs to @rockym93.'''
 	bot.api('sendMessage', send)
 
 bot.commands['/help'] = halp
+
+### End Definitions ###
+
+bot.processupdate(data)
