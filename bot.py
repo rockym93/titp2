@@ -130,12 +130,14 @@ I am a bit of a beta! Please report bugs to @rockym93.'''
 bot.commands['/help'] = halp
 
 def echo(message):
-	from_id: = message['from']['id']
+	from_id = message['from']['id']
 	if from_id == config['admin']:
 		chat_id = message['text'].split(' ', 2)[1]
 		t = message['text'].split(' ', 2)[2]
 		send = { 'text': t, 'chat_id': chat_id }
 		bot.api('sendMessage', send)
+
+bot.commands['/echo'] = echo
 
 ### End Definitions ###
 
