@@ -121,7 +121,7 @@ I am a frontend to The Inverse Timetable Project at https://www.rockym93.net/cod
 
 I am a shy bot! I prefer to make changes in private chats.
 I am a bit of a beta! Please report bugs to @rockym93.'''
-	send = { 'text': t, 'chat_id': from_id }
+	send = { 'text': t, 'chat_id': chat_id }
 	bot.api('sendMessage', send)
 
 bot.commands['/help'] = halp
