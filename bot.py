@@ -45,7 +45,6 @@ def start(message):
 	send = { 'text': t, 'chat_id': from_id }
 	bot.api('sendMessage', send)
 	
-	titp.save()
 	save_config()
 
 bot.commands['/start'] = start
@@ -129,6 +128,14 @@ I am a bit of a beta! Please report bugs to @rockym93.'''
 	bot.api('sendMessage', send)
 
 bot.commands['/help'] = halp
+
+def echo(message):
+	from_id: = message['from']['id']
+	if from_id == config['admin']:
+		chat_id = message['text'].split(' ', 2)[1]
+		t = message['text'].split(' ', 2)[2]
+		send = { 'text': t, 'chat_id': chat_id }
+		bot.api('sendMessage', send)
 
 ### End Definitions ###
 
