@@ -94,8 +94,10 @@ def getnow():
 	timenow = time.gmtime(time.time() + tt['tz'] * 3600)
 	daynow = time.strftime('%A', timenow)
 	hournow = str(int(time.strftime('%H', timenow))) #We don't want the zero at the front.
-	
-	return tt[daynow][hournow]
+	try:
+		return tt[daynow][hournow]
+	except KeyError:
+		return []
 
 def generate(): 
 	'''Builds the timetable html for all users.'''
