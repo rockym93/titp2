@@ -21,24 +21,24 @@ def processupdate(update):
 	'''
 
 	#1. If the update is text, check for commands.
-	if 'text' in u['message']:
+	if 'text' in update['message']:
 		text = update['message']['text']
 		
-		for i in text.split(' ',1)[0]:
+		for i in text.split(' '):
 			if i[0] == '/':
 				cmd = i
 				
 		if '@' in cmd:
 			cmd = cmd.split('@')[0]
-		
-		commands[cmd](u['message'])
+		cmd = str(cmd)
+		commands[cmd](update['message'])
 	
 	#2. If the update isn't a command, pass it to the appropriate handler.
 	#   This can include a generic text handler
 	else:
 		for h in handlers:
-			if h in u['message']:
-				handlers[h](u['message'])
+			if h in update['message']:
+				handlers[h](update['message'])
 
 # def getupdates:
 # 1. retrieve updates with api(getUpdates)

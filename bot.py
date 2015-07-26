@@ -8,7 +8,7 @@ import lazybot as bot
 print('Content-Type: application/json')
 print('')
 
-data = json.parse(sys.stdin.read())
+data = json.load(sys.stdin)
 
 try:
 	with open('bot.json') as f:
@@ -55,7 +55,7 @@ def callme(message):
 	firstname = message['from']['first_name']
 	newname = message['text'].split(' ')[-1]
 	config['users'][from_id] = newname
-	send = { 'text': 'Okay, ' + newname ' it is.', 'chat_id': from_id }
+	send = { 'text': 'Okay, ' + newname + ' it is.', 'chat_id': from_id }
 	bot.api('sendMessage', send)
 	
 bot.commands['/callme'] = callme
