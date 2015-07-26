@@ -82,7 +82,7 @@ def now(message):
 				t += i
 				t += ", "
 		t += " are free right now."
-	send = { 'text': t, 'chat_id': from_id }
+	send = { 'text': t, 'chat_id': chat_id }
 	bot.api('sendMessage', send)
 	
 bot.commands['/now'] = now
