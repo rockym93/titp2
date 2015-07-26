@@ -7,10 +7,6 @@ import json
 import time
 cgitb.enable()
 
-print('Content-Type: text/html')
-print('')
-print('<html><body>')
-
 days = ('Monday','Tuesday','Wednesday','Thursday','Friday')
 times = ('8','9','10','11','12','13','14','15','16','17','18')
 
@@ -130,6 +126,11 @@ def save():
 		json.dump(tt,f)
 
 if __name__ == '__main__':
+	
+	print('Content-Type: text/html')
+	print('')
+	print('<html><body>')
+	
 	processform()
 	generate()
 	save()
