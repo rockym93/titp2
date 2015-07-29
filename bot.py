@@ -71,10 +71,10 @@ def now(message):
 	else:
 		t = ""
 		for i in free:
-			if l.index(i) == len(free)-1:
+			if free.index(i) == len(free)-1:
 				t += "and "
 				t += i
-			if l.index(i) == len(free)-2:
+			elif free.index(i) == len(free)-2:
 				t += i
 				t += " "
 			else:
