@@ -33,19 +33,18 @@ def start(message):
 	from_id = message['from']['id']
 	firstname = message['from']['first_name']
 	t = "Hello!\n"
-	if from_id not in config['users'].keys():
-		t += "It looks like you're a new bot user. "
-		config['users'][from_id] = firstname
-		if firstname in titp.tt['users']:
-			t += "It also looks like you're already using TITP under your first name.\n"
-			t += "If that's not the case, you'll need to choose a new one using /callme, followed by your name."
-		if firstname not in titp.tt['users']:
-			t += "It also looks like you're a new TITP user\n"
-			t += "If you're already using TITP on the web, you can fix this by typing /callme, followed by the name you use on TITP."
+
+#	t += "It looks like you're a new bot user. "
+	if firstname in titp.tt['users']:
+		t += "It looks like you're already using TITP under your first name.\n"
+		t += "If that's not the case, you'll need to choose an alias using /callme, followed by your name."
+	if firstname not in titp.tt['users']:
+		t += "It looks like you're a new TITP user\n"
+		t += "If you're already using TITP on the web, you can fix this by typing /callme, followed by the name you use on TITP.\n"
+		t += "If not, you'll be registered the first time you change your availabilities."
 	send = { 'text': t, 'chat_id': from_id }
 	bot.api('sendMessage', send)
 	
-	save_config()
 
 bot.commands['/start'] = start
 
@@ -88,25 +87,19 @@ bot.commands['/now'] = now
 
 def free(message):
 	from_id = message['from']['id']
-	try:
-		username = config['users'][from_id]
-		titp.freenow(username)
-		titp.save()
-	except IndexError:
-		send = { 'text': "You need to enrol! Open a chat with me and type /start.", 'chat_id': from_id }
-		bot.api('sendMessage', send)
+	username = message['from']['first_name']
+	if str(from_id) in config['users']:  #str() because json uses string keys
+		username = config['users'][from_id]	
+	titp.freenow(username)
 
 bot.commands['/free'] = free
 
 def busy(message):
 	from_id = message['from']['id']
-	try:
+        username = message['from']['first_name']
+	if str(from_id) in config['users']:
 		username = config['users'][from_id]
-		titp.busynow(username)
-		titp.save()
-	except IndexError:
-		send = { 'text': "You need to enrol! Open a chat with me and type /start.", 'chat_id': from_id }
-		bot.api('sendMessage', send)
+	titp.busynow(username)
 		
 bot.commands['/busy'] = busy
 

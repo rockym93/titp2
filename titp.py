@@ -78,6 +78,7 @@ def freenow(name):
 	if daynow in days and hournow in times:	
 		if name not in tt[daynow][hournow]:
 			tt[daynow][hournow].append(name)
+	save()
 		
 def busynow(name):
 	'''Removes a name from the timetable for right now.'''
@@ -88,6 +89,7 @@ def busynow(name):
 	if daynow in days and hournow in times:	
 		if name in tt[daynow][hournow]:
 			tt[daynow][hournow].remove(name)
+	save()
 
 def getnow():
 	'''Gets who's free right now'''
