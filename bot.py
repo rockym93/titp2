@@ -83,6 +83,8 @@ def now(message):
 	send = { 'text': t, 'chat_id': chat_id }
 	bot.api('sendMessage', send)
 	
+bot.commands['/now'] = now
+	
 def next_now(message): #avoiding collision with next keyword; command is /next.
 	chat_id = message['chat']['id']
 	free = titp.getnext()
