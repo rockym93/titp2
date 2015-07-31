@@ -83,7 +83,30 @@ def now(message):
 	send = { 'text': t, 'chat_id': chat_id }
 	bot.api('sendMessage', send)
 	
-bot.commands['/now'] = now
+def next_now(message): #avoiding collision with next keyword; command is /next.
+	chat_id = message['chat']['id']
+	free = titp.getnext()
+	if len(free) == 0:
+		t = "Nobody is free next hour."
+	elif len(free) == 1:
+		t = free[0] + " is free next hour."
+	else:
+		t = ""
+		for i in free:
+			if free.index(i) == len(free)-1:
+				t += "and "
+				t += i
+			elif free.index(i) == len(free)-2:
+				t += i
+				t += " "
+			else:
+				t += i
+				t += ", "
+		t += " are free next hour."
+	send = { 'text': t, 'chat_id': chat_id }
+	bot.api('sendMessage', send)
+	
+bot.commands['/next'] = next_now
 
 def free(message):
 	from_id = message['from']['id']

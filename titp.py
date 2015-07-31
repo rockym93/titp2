@@ -101,6 +101,16 @@ def getnow():
 	except KeyError:
 		return []
 
+def getnext():
+	'''Gets who's free next hour'''
+	timenow = time.gmtime(time.time() + tt['tz'] * 3600)
+	daynow = time.strftime('%A', timenow)
+	hournow = str(int(time.strftime('%H', timenow)) + 1)
+	try:
+		return tt[daynow][hournow]
+	except KeyError:
+		return []
+
 def generate(): 
 	'''Builds the timetable html for all users.'''
 	s = str()
