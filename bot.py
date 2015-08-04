@@ -119,16 +119,16 @@ def today(message):
 		t = "Today's timetable:\n\n"
 		for hour in free:
 			names = ''
-			if len(hour) == 0:
+			if len(free[hour]) == 0:
 				pass
-			if len(hour) == 1:
-				names = hour[0]
+			if len(free[hour]) == 1:
+				names = free[hour][0]
 			else:
-				for i in hour:
-					if hour.index(i) == len(hour)-1:
+				for i in free[hour]:
+					if free[hour].index(i) == len(free[hour])-1:
 						names += "& "
 						names += i
-					elif hour.index(i) == len(hour)-2:
+					elif free[hour].index(i) == len(free[hour])-2:
 						names += i
 						names += " "
 					else:
