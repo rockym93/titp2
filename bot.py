@@ -26,7 +26,7 @@ bot.key = config['key']
 def save_config():
 	with open('bot.json','w') as f:
 		json.dump(config, f)
-	
+
 ### Command Definitions ###
 
 def start(message):
@@ -109,6 +109,39 @@ def next_now(message): #avoiding collision with next keyword; command is /next.
 	bot.api('sendMessage', send)
 	
 bot.commands['/next'] = next_now
+
+def today(message):
+	chat_id = message['chat']['id']
+	free = titp.gettoday()
+	template = "[{hour}]: {names}\n"
+
+	if free:
+		t = "Today's timetable:\n\n"
+		for hour in free:
+			names = ''
+			if len(hour) == 0:
+				pass
+			if len(hour) == 1:
+				names = hour[0]
+			else:
+				for i in hour:
+					if hour.index(i) == len(hour)-1:
+						names += "& "
+						names += i
+					elif hour.index(i) == len(hour)-2:
+						names += i
+						names += " "
+					else:
+						names += i
+						names += ", "
+			t += template.format(hour=hour, names=names)
+	else:
+		t = "Today's availabilities are not... available. How ironic. It's probably the weekend, go outside or something."
+	send = { 'text': t, 'chat_id': chat_id }
+	bot.api('sendMessage', send)
+					
+					
+			
 
 def free(message):
 	from_id = message['from']['id']

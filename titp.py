@@ -111,6 +111,15 @@ def getnext():
 	except KeyError:
 		return []
 
+def gettoday():
+	'''Gets who's free for the whole of today.'''
+	timenow = time.gmtime(time.time() + tt['tz'] * 3600)
+	daynow = time.strftime('%A', timenow)
+	try:
+		return tt[daynow]
+	except KeyError:
+		return {}
+
 def generate(): 
 	'''Builds the timetable html for all users.'''
 	s = str()
