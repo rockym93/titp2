@@ -175,6 +175,8 @@ I am a frontend to The Inverse Timetable Project at https://www.rockym93.net/cod
 /free marks you as free at this time - permanently.
 /busy marks you as busy at this time - permanently.
 /now tells you who is free right now.
+/next tells you who is free next.
+/today tells you who is free all day.
 
 I am a shy bot! I prefer to make changes in private chats.
 I am a bit of a beta! Please report bugs to @rockym93.'''
