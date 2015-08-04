@@ -117,7 +117,9 @@ def today(message):
 
 	if free:
 		t = "Today's timetable:\n\n"
-		for hour in free:
+		hours = free.keys()
+		hours.sort(key=float)
+		for hour in hours:
 			names = ''
 			if len(free[hour]) == 0:
 				pass
