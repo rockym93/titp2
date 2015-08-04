@@ -139,7 +139,8 @@ def today(message):
 		t = "Today's availabilities are not... available. How ironic. It's probably the weekend, go outside or something."
 	send = { 'text': t, 'chat_id': chat_id }
 	bot.api('sendMessage', send)
-					
+
+bot.commands['/today'] = today
 					
 			
 
