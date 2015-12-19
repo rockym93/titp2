@@ -20,9 +20,16 @@ except IOError:
 		for h in times:
 			tt[d][h] = []
 			
-if 'tz' not in tt.keys():
-	tt['tz'] = 0
-	#Defaults to GMT, you'll have to change this in the JSON. Sorry.
+try:
+	with file('.timezone') as f
+		tz = f.read()
+except IOError:
+	tz = 0
+
+import os
+os.environ['TZ'] = tz
+time.tzset()
+#Defaults to GMT, you'll have to change this in the JSON. Sorry.
 
 def clearname(name):
 	'''Removes a name from the timetable'''
