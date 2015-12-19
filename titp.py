@@ -75,9 +75,9 @@ def processform():
 
 def freenow(name):
 	'''Adds a name to the timetable for right now.'''
-	timenow = time.gmtime(time.time() + tt['tz'] * 3600)
+	timenow = time.localtime()
 	daynow = time.strftime('%A', timenow)
-	hournow = str(int(time.strftime('%H', timenow))) #We don't want the zero at the front.
+	hournow = str(timenow.tm_hour)
 	
 	if name not in tt['users']:
 		tt['users'].append(name)
@@ -89,9 +89,9 @@ def freenow(name):
 		
 def busynow(name):
 	'''Removes a name from the timetable for right now.'''
-	timenow = time.gmtime(time.time() + tt['tz'] * 3600)
+	timenow = time.localtime()
 	daynow = time.strftime('%A', timenow)
-	hournow = str(int(time.strftime('%H', timenow))) #We don't want the zero at the front.
+	hournow = str(timenow.tm_hour)
 	
 	if daynow in days and hournow in times:	
 		if name in tt[daynow][hournow]:
@@ -100,9 +100,9 @@ def busynow(name):
 
 def getnow():
 	'''Gets who's free right now'''
-	timenow = time.gmtime(time.time() + tt['tz'] * 3600)
+	timenow = time.localtime()
 	daynow = time.strftime('%A', timenow)
-	hournow = str(int(time.strftime('%H', timenow))) #We don't want the zero at the front.
+	hournow = str(timenow.tm_hour)
 	try:
 		return tt[daynow][hournow]
 	except KeyError:
@@ -110,9 +110,9 @@ def getnow():
 
 def getnext():
 	'''Gets who's free next hour'''
-	timenow = time.gmtime(time.time() + tt['tz'] * 3600)
+	timenow = time.localtime()
 	daynow = time.strftime('%A', timenow)
-	hournow = str(int(time.strftime('%H', timenow)) + 1)
+	hournow = str(timenow.tm_hour + 1)
 	try:
 		return tt[daynow][hournow]
 	except KeyError:
