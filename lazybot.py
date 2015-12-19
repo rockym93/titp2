@@ -1,10 +1,20 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 import requests
+import sys
+import json
 
 key = ''
 url = 'https://api.telegram.org/'
 commands = {}
 handlers = {}
+
+print('Content-Type: application/json')
+print('')
+
+data = json.load(sys.stdin)
+
+#with open('key.txt') as f:
+#	key = f.read().rstrip()
 
 def api(method, params=None, files=None):
 	'''
@@ -14,7 +24,7 @@ def api(method, params=None, files=None):
 	r = requests.post(url + key + '/' + method, params=params, files=files)
 	return r.json()
 	
-def processupdate(update):
+def processupdate(update=data):
 	'''
 	I take an entire (but decoded to dict, please) *update* object from Telegram.
 	I look for things that this bot knows how to deal with, and execute the appropriate function.

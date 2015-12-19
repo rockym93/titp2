@@ -5,11 +5,6 @@ import sys
 import json
 import lazybot as bot
 
-print('Content-Type: application/json')
-print('')
-
-data = json.load(sys.stdin)
-
 try:
 	with open('bot.json') as f:
 		config = json.load(f)
