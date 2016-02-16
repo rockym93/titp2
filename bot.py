@@ -188,6 +188,108 @@ def echo(message):
 
 bot.commands['/echo'] = echo
 
+### Event management ###
+import events
+
+def newevent(message):
+	chat_id = message['chat']['id']
+	from_id = message['from']['id']
+	t = message['text'].split(' ',4)
+	try:
+		eventid = t[1]
+	except IndexError:
+		send = {'text': "You need to specify a name for your event. Try /event (eventname) instead.", 'chat_id': chat_id)
+		bot.api('sendMessage', send)
+	else:
+		send = {'text':"",'chat_id': chat_id,
+		problems = False
+		events.newevent(eventid)
+		if len(t) >= 3:
+			try:
+				events.setdate(eventid, t[2])
+			except:
+				send['text'] += "Theres a problem with your date.\n"
+				problems = True
+		if len(t) >=4:
+			try:
+				events.settime(eventid, t[3])
+			except:
+				send['text'] += "There's a problem with your time.\n"
+				problems = True
+		if len(t) >= 5:
+			try:
+				events.setdescription(eventid, t[4])
+			except:
+				send['text'] += "There's a problem with your description.\n"
+				problems = True
+
+		if problems:
+			send['text'] += "Apart from that... "
+		send['text'] += "Your event has been created!"
+		bot.api('sendMessage', send)
+
+bot.commands['/event'] = newevent
+
+def setevent(message):
+	chat_id = message['chat']['id']
+	t = message['text'].split(' ',3)
+	usage = "This works like this: /set [event name] [thing you want to change] [what you want to change it to]"
+	dateusage = "Date: Today, tomorrow, 26, 26/1 or 26/1/2016 are all ok."
+	timeusage = "Time: 11am 11pm or 11:37 are all ok"
+	locusage = "Location: use a valid bookmark, or reply to this message with a gps location."
+	descusage = "Description: Go nuts - but it can't be empty."
+	try:
+		t[1] = eventid
+		t[2] = attribute
+	except IndexError:
+		bot.api('sendMessage', { 'text': usage, 'chat_id': chat_id })
+	else:
+
+	if attribute == 'date':
+		try:
+			events.setdate(eventid, t[3])
+		except:
+			bot.api('sendMessage', { 'text': dateusage, 'chat_id': chat_id })
+	
+	if attribute == 'time':
+		try:
+			events.settime(eventid, t[3])
+		except:
+			bot.api('sendMessage', { 'text': timeusage, 'chat_id': chat_id })
+
+	if attribute == 'description':
+		try:
+			events.setdescription(eventid, t[3])
+		except:
+			bot.api('sendMessage', { 'text': descusage, 'chat_id': chat_id })
+
+	
+	if attribute == 'location'
+		with open('locodex.json') as f:
+			locodex = json.load(f)
+		if t[3] in locodex:
+			events.setlocation(eventid, locodex[location])
+		else:
+			bot.api('sendMessage', 
+			{ 'text': "[" + eventid + "]\n" + locusage, 
+			'chat_id': chat_id, 
+			'reply_to_message_id':message['message_id'],
+			'reply_markup': '{"force_reply": true}'})
+
+bot.commands['/set'] = setevent
+
+	
+def locationhandler(message):
+	eventid = message['reply_to_message']['text'].split(']')[0].lstrip('[')
+	location = (message['location']['latitude'], message['location']['longitude']
+	events.setlocation(eventid, location)
+	
+bot.handlers['location'] = locationhandler
+
+
+
+
+
 ### End Definitions ###
 
 bot.processupdate(data)
