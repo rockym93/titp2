@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import titp
 import sys
@@ -17,6 +17,7 @@ except IOError:
 	}
 
 bot.key = config['key']
+bot.logging = True
 
 def save_config():
 	with open('bot.json','w') as f:
@@ -150,7 +151,7 @@ bot.commands['/free'] = free
 
 def busy(message):
 	from_id = message['from']['id']
-        username = message['from']['first_name']
+	username = message['from']['first_name']
 	if str(from_id) in config['users']:
 		username = config['users'][from_id]
 	titp.busynow(username)
@@ -161,19 +162,22 @@ def halp(message):
 # to be mapped to /help, but we're avoiding a collision with the builtin.
 	chat_id = message['chat']['id']
 	t = '''
-I am a frontend to The Inverse Timetable Project at https://www.rockym93.net/code/titp2/ .
+I am a frontend to [The Inverse Timetable Project](https://www.rockym93.net/code/titp2/).
 
-/start sets you up to use me.
-/callme changes the name I - and the website - use for you.
+*Timetabling*
 /free marks you as free at this time - permanently.
 /busy marks you as busy at this time - permanently.
 /now tells you who is free right now.
 /next tells you who is free next.
 /today tells you who is free all day.
 
-I am a shy bot! I prefer to make changes in private chats.
-I am a bit of a beta! Please report bugs to @rockym93.'''
-	send = { 'text': t, 'chat_id': chat_id }
+*Events*
+/new (eventname) creates a new event.
+/set (eventname) (time/date/description/location) sets details.
+/end (eventname) removes an event.
+/list will tell you which events are coming up.
+/info (eventname) will tell you more and let you RSVP.'''
+	send = { 'text': t, 'chat_id': chat_id, 'parse_mode':'Markdown' }
 	bot.api('sendMessage', send)
 
 bot.commands['/help'] = halp
@@ -183,7 +187,7 @@ def echo(message):
 	if from_id == config['admin']:
 		chat_id = message['text'].split(' ', 2)[1]
 		t = message['text'].split(' ', 2)[2]
-		send = { 'text': t, 'chat_id': chat_id }
+		send = { 'text': t, 'chat_id': chat_id, 'reply_markup':'{"hide_keyboard": true'}
 		bot.api('sendMessage', send)
 
 bot.commands['/echo'] = echo
@@ -198,37 +202,37 @@ def newevent(message):
 	try:
 		eventid = t[1]
 	except IndexError:
-		send = {'text': "You need to specify a name for your event. Try /event (eventname) instead.", 'chat_id': chat_id)
+		send = {'text': "You need to specify a name for your event. Try /new (eventname) instead.", 'chat_id': chat_id}
 		bot.api('sendMessage', send)
 	else:
-		send = {'text':"",'chat_id': chat_id,
+		send = {'text':"",'chat_id': chat_id,}
 		problems = False
 		events.newevent(eventid)
 		if len(t) >= 3:
-			try:
-				events.setdate(eventid, t[2])
-			except:
-				send['text'] += "Theres a problem with your date.\n"
-				problems = True
+#			try:
+			events.setdate(eventid, t[2])
+#			except:
+#				send['text'] += "Theres a problem with your date.\n"
+#				problems = True
 		if len(t) >=4:
-			try:
-				events.settime(eventid, t[3])
-			except:
-				send['text'] += "There's a problem with your time.\n"
-				problems = True
+#			try:
+			events.settime(eventid, t[3])
+#			except:
+#				send['text'] += "There's a problem with your time.\n"
+#				problems = True
 		if len(t) >= 5:
-			try:
-				events.setdescription(eventid, t[4])
-			except:
-				send['text'] += "There's a problem with your description.\n"
-				problems = True
+#			try:
+			events.setdescription(eventid, t[4])
+#			except:
+#				send['text'] += "There's a problem with your description.\n"
+#				problems = True
 
 		if problems:
 			send['text'] += "Apart from that... "
 		send['text'] += "Your event has been created!"
 		bot.api('sendMessage', send)
 
-bot.commands['/event'] = newevent
+bot.commands['/new'] = newevent
 
 def setevent(message):
 	chat_id = message['chat']['id']
@@ -236,60 +240,146 @@ def setevent(message):
 	usage = "This works like this: /set [event name] [thing you want to change] [what you want to change it to]"
 	dateusage = "Date: Today, tomorrow, 26, 26/1 or 26/1/2016 are all ok."
 	timeusage = "Time: 11am 11pm or 11:37 are all ok"
-	locusage = "Location: use a valid bookmark, or reply to this message with a gps location."
+	locusage = "Location: reply to this message with a gps location."
 	descusage = "Description: Go nuts - but it can't be empty."
 	try:
-		t[1] = eventid
-		t[2] = attribute
+		eventid = t[1]
+		attribute = t[2]
 	except IndexError:
 		bot.api('sendMessage', { 'text': usage, 'chat_id': chat_id })
 	else:
 
-	if attribute == 'date':
-		try:
-			events.setdate(eventid, t[3])
-		except:
-			bot.api('sendMessage', { 'text': dateusage, 'chat_id': chat_id })
-	
-	if attribute == 'time':
-		try:
-			events.settime(eventid, t[3])
-		except:
-			bot.api('sendMessage', { 'text': timeusage, 'chat_id': chat_id })
+		if attribute == 'date':
+			try:
+				events.setdate(eventid, t[3])
+			except:
+				bot.api('sendMessage', { 'text': dateusage, 'chat_id': chat_id })
+		
+		if attribute == 'time':
+			try:
+				events.settime(eventid, t[3])
+			except:
+				bot.api('sendMessage', { 'text': timeusage, 'chat_id': chat_id })
 
-	if attribute == 'description':
-		try:
-			events.setdescription(eventid, t[3])
-		except:
-			bot.api('sendMessage', { 'text': descusage, 'chat_id': chat_id })
+		if attribute == 'description':
+			try:
+				events.setdescription(eventid, t[3])
+			except:
+				bot.api('sendMessage', { 'text': descusage, 'chat_id': chat_id })
 
-	
-	if attribute == 'location'
-		with open('locodex.json') as f:
-			locodex = json.load(f)
-		if t[3] in locodex:
-			events.setlocation(eventid, locodex[location])
-		else:
-			bot.api('sendMessage', 
-			{ 'text': "[" + eventid + "]\n" + locusage, 
-			'chat_id': chat_id, 
-			'reply_to_message_id':message['message_id'],
-			'reply_markup': '{"force_reply": true}'})
+		
+		if attribute == 'location':
+			with open('locodex.json') as f:
+				locodex = json.load(f)
+			if len(t) == 4:
+				if t[3] in locodex:
+					events.setlocation(eventid, locodex[location])
+			else:
+				bot.api('sendMessage', 
+				{ 'text': "[" + eventid + "]\n" + locusage, 
+				'chat_id': chat_id, 
+				'reply_to_message_id':message['message_id'],
+				'reply_markup': '{"force_reply": true, "selective": true}'
+				})
 
 bot.commands['/set'] = setevent
 
 	
 def locationhandler(message):
 	eventid = message['reply_to_message']['text'].split(']')[0].lstrip('[')
-	location = (message['location']['latitude'], message['location']['longitude']
+	location = (message['location']['latitude'], message['location']['longitude'])
 	events.setlocation(eventid, location)
 	
 bot.handlers['location'] = locationhandler
 
+def listevents(message):
+	t = { 'chat_id': message['chat']['id'], 'text':"*Current events:*\n",'parse_mode':'Markdown','reply_markup': '{"hide_keyboard": true'}
+	for i in events.listevents():
+		event = events.getevent(i)
+		#~ try:
+			#~ edate = "{}/{}/{}".format(*event['date'])
+		#~ except KeyError:
+			#~ edate = "no date set,"
+		#~ try:
+			#~ etime = "{}:{}".format(*event['time'])
+		#~ except KeyError:
+			#~ etime = "no time set"
+
+		t['text'] += i + "\n"
+	bot.api('sendMessage', t)
+
+bot.commands['/list'] = listevents
+
+def eventdetails(message):
+	template = '''*[{eventid}]*
+_{date} {time}_
+{description}
+
+{in}
+
+{out}
+'''
+	
+	eventid = message['text'].split(' ')[1]
+	event = events.getevent(eventid)
+	event['eventid'] = eventid
+	if event['date']:
+		event['date'] = "{}/{}/{}".format(*event['date'])
+	if event['time']:
+		event['time'] = "{}:{}".format(str(event['time'][0]), str(event['time'][1]).zfill(2))
+#	event['in'] = "\n".join(event['in'])
+#	event['out'] = "\n".join(event['out'])
+	if len(event['in']) == 0:
+		event['in'] = "Nobody is in"
+	elif len(event['in']) == 1:
+		event['in'] = event['in'][0] + " is in"
+	elif len(event['in']) > 1:
+		event['in'] = " &".join(", ".join(event['in']).rsplit(",",1)) + " are in"
+
+	if len(event['out']) == 0:
+		event['out'] = "Nobody is out"
+	elif len(event['out']) == 1:
+		event['out'] = event['out'][0] + " is out"
+	elif len(event['out']) > 1:
+		event['out'] = " &".join(", ".join(event['out']).rsplit(",",1)) + " are out"
+
+	
+	for i in event:
+		if not event[i]:
+			event[i] = ""
+	if event['location']:
+		l = { 'chat_id': message['chat']['id'], 
+		'latitude': event['location'][0],
+		'longitude': event['location'][1]}
+		bot.api('sendLocation',l)
+	t = { 'chat_id': message['chat']['id'], 
+	'text': template.format(**event),
+	'parse_mode':'Markdown',
+	'reply_markup': '{"force_reply": true, "resize_keyboard": true, "keyboard": [["\\ud83d\\udc4d ' + eventid + '", "\\ud83d\\udc4e ' + eventid + '"]], "one_time_keyboard": true}'}
+	bot.api('sendMessage', t)
+	
+
+bot.commands['/info'] = eventdetails
+
+def attendhandler(message):
+	user = message['from']['first_name']
+	state = message['text'].split(' ')[0]
+	eventid = message['text'].split(' ')[1]
+	print([eventid, user, state], file=sys.stderr)
+	if state == "👍": # Thumbs up emoji \xf0\x9f\x91\x8d
+		events.setattendance(eventid, user, True)
+	elif state == "👎": # Thumbs down emoji \xf0\x9f\x91\x8e
+		events.setattendance(eventid, user, False)
+
+bot.handlers['text'] = attendhandler
+
+def deleteevent(message):
+	eventid = message['text'].split(' ')[1]
+	events.deleteevent(eventid)
+
+bot.commands['/end'] = deleteevent
 
 
+## End Definitions ###
 
-
-### End Definitions ###
-
-bot.processupdate(data)
+bot.processupdate(bot.data)

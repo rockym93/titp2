@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 VERSION = "2.2"
 import cgi
 import cgitb
@@ -21,8 +21,8 @@ except IOError:
 			tt[d][h] = []
 			
 try:
-	with file('.timezone') as f
-		tz = f.read()
+	with open('.timezone') as f:
+		tz = f.read().rstrip('\n')
 except IOError:
 	tz = 0
 
