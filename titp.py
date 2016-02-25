@@ -43,7 +43,7 @@ def clearname(name):
 def checks(name, captcha):
 	'''Check that CAPTCHA is correct and inputs are safe.'''
 	for i in name:
-		if i not in string.letters:
+		if i not in string.ascii_letters:
 			return False
 	if captcha != 'apple':
 		return False

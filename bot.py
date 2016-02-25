@@ -200,7 +200,7 @@ def newevent(message):
 	from_id = message['from']['id']
 	t = message['text'].split(' ',4)
 	try:
-		eventid = t[1]
+		eventid = t[1].lower()
 	except IndexError:
 		send = {'text': "You need to specify a name for your event. Try /new (eventname) instead.", 'chat_id': chat_id}
 		bot.api('sendMessage', send)
@@ -240,35 +240,35 @@ def setevent(message):
 	usage = "This works like this: /set [event name] [thing you want to change] [what you want to change it to]"
 	dateusage = "Date: Today, tomorrow, 26, 26/1 or 26/1/2016 are all ok."
 	timeusage = "Time: 11am 11pm or 11:37 are all ok"
-	locusage = "Location: reply to this message with a gps location."
+	locusage = "Location: reply to this message with a location attachment."
 	descusage = "Description: Go nuts - but it can't be empty."
 	try:
-		eventid = t[1]
-		attribute = t[2]
+		eventid = t[1].lower()
+		attribute = t[2].lower()
 	except IndexError:
 		bot.api('sendMessage', { 'text': usage, 'chat_id': chat_id })
 	else:
 
-		if attribute == 'date':
+		if attribute in 'date':
 			try:
 				events.setdate(eventid, t[3])
 			except:
 				bot.api('sendMessage', { 'text': dateusage, 'chat_id': chat_id })
 		
-		if attribute == 'time':
+		if attribute in 'time':
 			try:
 				events.settime(eventid, t[3])
 			except:
 				bot.api('sendMessage', { 'text': timeusage, 'chat_id': chat_id })
 
-		if attribute == 'description':
+		if attribute in 'description':
 			try:
 				events.setdescription(eventid, t[3])
 			except:
 				bot.api('sendMessage', { 'text': descusage, 'chat_id': chat_id })
 
 		
-		if attribute == 'location':
+		if attribute in 'location':
 			with open('locodex.json') as f:
 				locodex = json.load(f)
 			if len(t) == 4:
@@ -286,7 +286,7 @@ bot.commands['/set'] = setevent
 
 	
 def locationhandler(message):
-	eventid = message['reply_to_message']['text'].split(']')[0].lstrip('[')
+	eventid = message['reply_to_message']['text'].split(']')[0].lstrip('[').lower()
 	location = (message['location']['latitude'], message['location']['longitude'])
 	events.setlocation(eventid, location)
 	
@@ -320,7 +320,7 @@ _{date} {time}_
 {out}
 '''
 	
-	eventid = message['text'].split(' ')[1]
+	eventid = message['text'].split(' ')[1].lower()
 	event = events.getevent(eventid)
 	event['eventid'] = eventid
 	if event['date']:
@@ -364,7 +364,7 @@ bot.commands['/info'] = eventdetails
 def attendhandler(message):
 	user = message['from']['first_name']
 	state = message['text'].split(' ')[0]
-	eventid = message['text'].split(' ')[1]
+	eventid = message['text'].split(' ')[1].lower()
 	print([eventid, user, state], file=sys.stderr)
 	if state == "👍": # Thumbs up emoji \xf0\x9f\x91\x8d
 		events.setattendance(eventid, user, True)
