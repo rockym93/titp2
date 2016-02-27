@@ -293,7 +293,7 @@ def locationhandler(message):
 bot.handlers['location'] = locationhandler
 
 def listevents(message):
-	t = { 'chat_id': message['chat']['id'], 'text':"*Current events:*\n",'parse_mode':'Markdown','reply_markup': '{"hide_keyboard": true'}
+	t = { 'chat_id': message['chat']['id'], 'text':"*Current events:*\n",'parse_mode':'Markdown','reply_markup': '{"hide_keyboard": true}'}
 	for i in events.listevents():
 		event = events.getevent(i)
 		#~ try:
@@ -365,11 +365,20 @@ def attendhandler(message):
 	user = message['from']['first_name']
 	state = message['text'].split(' ')[0]
 	eventid = message['text'].split(' ')[1].lower()
+	
+	t = {'reply_markup': '{"hide_keyboard": true, "selective": true}',
+	'reply_to_message_id': message['message_id'],
+	'chat_id': message['chat']['id'],
+	'text':state,
+	'disable_notification': True}
+	
 	print([eventid, user, state], file=sys.stderr)
 	if state == "👍": # Thumbs up emoji \xf0\x9f\x91\x8d
 		events.setattendance(eventid, user, True)
+		bot.api('sendMessage',t)
 	elif state == "👎": # Thumbs down emoji \xf0\x9f\x91\x8e
 		events.setattendance(eventid, user, False)
+		bot.api('sendMessage',t)
 
 bot.handlers['text'] = attendhandler
 
