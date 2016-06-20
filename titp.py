@@ -120,7 +120,7 @@ def getnext():
 
 def gettoday():
 	'''Gets who's free for the whole of today.'''
-	timenow = time.gmtime(time.time() + tt['tz'] * 3600)
+	timenow = time.localtime()
 	daynow = time.strftime('%A', timenow)
 	try:
 		return tt[daynow]

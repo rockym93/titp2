@@ -62,7 +62,7 @@ def now(message):
 	if len(free) == 0:
 		t = "Nobody is free right now."
 	elif len(free) == 1:
-		t = free[0] + " is free right now."
+		t = free[0] + " is lonely right now."
 	else:
 		t = ""
 		for i in free:
@@ -87,7 +87,7 @@ def next_now(message): #avoiding collision with next keyword; command is /next.
 	if len(free) == 0:
 		t = "Nobody is free next hour."
 	elif len(free) == 1:
-		t = free[0] + " is free next hour."
+		t = free[0] + " is lonely next hour."
 	else:
 		t = ""
 		for i in free:
@@ -187,7 +187,7 @@ def echo(message):
 	if from_id == config['admin']:
 		chat_id = message['text'].split(' ', 2)[1]
 		t = message['text'].split(' ', 2)[2]
-		send = { 'text': t, 'chat_id': chat_id, 'reply_markup':'{"hide_keyboard": true'}
+		send = { 'text': t, 'chat_id': chat_id, 'reply_markup': '{"hide_keyboard": true}'}
 		bot.api('sendMessage', send)
 
 bot.commands['/echo'] = echo
