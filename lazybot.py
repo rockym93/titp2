@@ -34,26 +34,31 @@ def processupdate(update=data):
 		with open('dump.json','a') as f:
 			json.dump(update,f)
 	
+	#0. First, check for callback queries
+	if 'callback_query' in update:
+		if 'callback_query' in handlers:
+			handlers['callback_query'](update['callback_query'])
 	
 	#1. If the update is text, check for commands.
-	try:
-		text = update['message']['text']
-		cmd = text.split(' ')[0]
-	
-		if '@' in cmd:
-			cmd = cmd.split('@')[0]
+	elif 'message' in update:
+		try:
+			text = update['message']['text']
+			cmd = text.split(' ')[0]
 		
-		commands[cmd](update['message'])
+			if '@' in cmd:
+				cmd = cmd.split('@')[0]
+			
+			commands[cmd](update['message'])
+			
+		#2. If the update isn't a text command in our command list, 
+		#   pass it to the appropriate handler.
+		#   This can include a generic text handler
 		
-	#2. If the update isn't a text command in our command list, 
-	#   pass it to the appropriate handler.
-	#   This can include a generic text handler
-	
-	except KeyError:
-		for h in handlers:
-			if h in update['message']:
-				handlers[h](update['message'])
-	
+		except KeyError:
+			for h in handlers:
+				if h in update['message']:
+					handlers[h](update['message'])
+		
 
 
 

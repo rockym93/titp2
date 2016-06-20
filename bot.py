@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import titp
 import sys
 import json
 import lazybot as bot
@@ -310,7 +309,7 @@ def listevents(message):
 
 bot.commands['/list'] = listevents
 
-def eventdetails(message):
+def detailbuilder(eventid):
 	template = '''*[{eventid}]*
 _{date} {time}_
 {description}
@@ -319,8 +318,6 @@ _{date} {time}_
 
 {out}
 '''
-	
-	eventid = message['text'].split(' ')[1].lower()
 	event = events.getevent(eventid)
 	event['eventid'] = eventid
 	if event['date']:
@@ -347,15 +344,23 @@ _{date} {time}_
 	for i in event:
 		if not event[i]:
 			event[i] = ""
+	return template.format(**event)
+	
+def eventdetails(message):
+
+	
+	eventid = message['text'].split(' ')[1].lower()
+	event = events.getevent(eventid)
+
 	if event['location']:
 		l = { 'chat_id': message['chat']['id'], 
 		'latitude': event['location'][0],
 		'longitude': event['location'][1]}
 		bot.api('sendLocation',l)
 	t = { 'chat_id': message['chat']['id'], 
-	'text': template.format(**event),
+	'text': detailbuilder(eventid),
 	'parse_mode':'Markdown',
-	'reply_markup': '{"force_reply": true, "resize_keyboard": true, "keyboard": [["\\ud83d\\udc4d ' + eventid + '", "\\ud83d\\udc4e ' + eventid + '"]], "one_time_keyboard": true}'}
+	'reply_markup': '{"inline_keyboard": [[{"text": "\\ud83d\\udc4d", "callback_data": "1 ' + eventid +'"},{"text": "\\ud83d\\udc4e", "callback_data": "0 ' + eventid +'"}]]}'}
 	bot.api('sendMessage', t)
 	
 
@@ -363,24 +368,30 @@ bot.commands['/info'] = eventdetails
 
 def attendhandler(message):
 	user = message['from']['first_name']
-	state = message['text'].split(' ')[0]
-	eventid = message['text'].split(' ')[1].lower()
-	
-	t = {'reply_markup': '{"hide_keyboard": true, "selective": true}',
-	'reply_to_message_id': message['message_id'],
-	'chat_id': message['chat']['id'],
-	'text':state,
-	'disable_notification': True}
+	state = message['data'].split(' ')[0]
+	eventid = message['data'].split(' ')[1].lower()
+	originator = message['message']
+
 	
 	print([eventid, user, state], file=sys.stderr)
-	if state == "👍": # Thumbs up emoji \xf0\x9f\x91\x8d
+	if state == "1": 
 		events.setattendance(eventid, user, True)
-		bot.api('sendMessage',t)
-	elif state == "👎": # Thumbs down emoji \xf0\x9f\x91\x8e
-		events.setattendance(eventid, user, False)
-		bot.api('sendMessage',t)
 
-bot.handlers['text'] = attendhandler
+	elif state == "0": 
+		events.setattendance(eventid, user, False)
+
+	
+	e = {'chat_id':originator['chat']['id'],
+	'message_id':originator['message_id'],
+	'text': detailbuilder(eventid),
+	'parse_mode':'Markdown',
+	'reply_markup': '{"inline_keyboard": [[{"text": "\\ud83d\\udc4d", "callback_data": "1 ' + eventid +'"},{"text": "\\ud83d\\udc4e", "callback_data": "0 ' + eventid +'"}]]}'}
+	
+	bot.api('editMessageText', e)
+		
+	
+
+bot.handlers['callback_query'] = attendhandler
 
 def deleteevent(message):
 	eventid = message['text'].split(' ')[1]
