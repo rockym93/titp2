@@ -162,7 +162,7 @@ if __name__ == '__main__':
 	
 	print('Content-Type: text/html')
 	print('')
-	print('<html><body>')
+
 	
 	processform()
 	generate()

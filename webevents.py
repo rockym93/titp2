@@ -10,8 +10,9 @@ template = '''
 <p>
 <em>{date} - {time}</em><br />
 {description}
-
 </p>
+<p>{in}</p>
+<p>{out}</p>
 <p>
 <input type="hidden" name="eventid" value="{eventid}" />
 <input type="text" name="name" />
