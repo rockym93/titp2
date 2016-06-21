@@ -4,7 +4,7 @@ import cgi
 
 s = '''
 <p>
-<a href="javascript:void(0)" onclick="document.getElementById('newevent').style.display='block'"><span class="icon-plus"></span>create event</a>
+<a href="javascript:void(0)" onclick="document.getElementById('newevent').style.display='block'"><span class="icon-plus"></span> create event</a>
 </p>
 <div id="newevent" style="margin:1em; display:none">
 
@@ -25,7 +25,7 @@ template = '''
 <form action="webevents.py" action="POST">
 <h4>[{eventid}]</h4>
 <p>
-<em>{date} - {time}</em><br />
+<em>{date} - {time}</em> {location} <br />
 {description}
 </p>
 <p>{in}</p>
@@ -88,6 +88,10 @@ for eventid in events.listevents():
 	elif len(event['out']) > 1:
 		event['out'] = " &".join(", ".join(event['out']).rsplit(",",1)) + " are out"
 	
+	if event['location']:
+		event['location'] = '<a class="icon-location-pin" href="http://maps.google.com/?q="' + event['location']['latitude'] + ',' + event['location']['longitude'] + '" />'
+	else:
+		event['location'] = ''
 	s += template.format(**event)
 with open('page.html') as f:
 	page = f.read()
