@@ -24,15 +24,17 @@ template = '''
 form = cgi.FieldStorage()
 rsvpname = form.getvalue('name')
 rsvpevent = form.getvalue('eventid')
+response = None
 if 'in' in form:
 	response = True
 if 'out' in form:
 	response = False
 
-events.setattendance(rsvpevent, rsvpname, response)
+if rsvpname is not None and response is not None:
+	events.setattendance(rsvpevent, rsvpname, response)
 
-for eventid in listevents():
-	event = events.getevent(i)
+for eventid in events.listevents():
+	event = events.getevent(eventid)
 	event['eventid'] = eventid
 	event['eventid'] = eventid
 	if event['date']:
@@ -56,7 +58,10 @@ for eventid in listevents():
 
 	s += template.format(**event)
 with open('page.html') as f:
-page = f.read()
+	page = f.read()
+
+print('Content-Type: text/html')
+print('')
 	
 print(page.replace('<!--timetable-->',s))
 
