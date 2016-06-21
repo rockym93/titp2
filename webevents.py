@@ -3,8 +3,8 @@ import events
 import cgi
 
 s = '''
-<p style="float:right">
-<a class="icon-plus" href="javascript:void(0)" onclick="document.getElementById('newevent').style.display='block'">create event</a>
+<p>
+<a href="javascript:void(0)" onclick="document.getElementById('newevent').style.display='block'"><span class="icon-plus"></span>create event</a>
 </p>
 <div id="newevent" style="margin:1em; display:none">
 
