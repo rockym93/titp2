@@ -25,7 +25,7 @@ template = '''
 <form action="webevents.py" action="POST">
 <h4>[{eventid}]</h4>
 <p>
-<em>{date} - {time}</em> {location} <br />
+{location} <em>{date} - {time}</em><br />
 {description}
 </p>
 <p>{in}</p>
@@ -89,7 +89,9 @@ for eventid in events.listevents():
 		event['out'] = " &".join(", ".join(event['out']).rsplit(",",1)) + " are out"
 	
 	if event['location']:
-		event['location'] = '<a class="icon-location-pin" href="http://maps.google.com/?q="' + event['location']['latitude'] + ',' + event['location']['longitude'] + '" />'
+		latitude = str(event['location'][0])
+		longitude = str(event['location'][1])
+		event['location'] = '<a class="icon-location-pin" href="http://maps.google.com/?q=' + latitude + ',' + longitude + '" ></a>'
 	else:
 		event['location'] = ''
 	s += template.format(**event)
