@@ -2,7 +2,24 @@
 import events
 import cgi
 
-s = ''
+s = '''
+<p class="icon-plus" style="float:right">
+<a href="javascript:void(0)" onclick="document.getElementById('newevent').style.display='block'">0 comments</a>
+</p>
+<div id="newevent" style="margin:1em; display:none">
+
+<form method="post" action="/blog/comment.py?id=1466320221">
+<p>
+event id: <input type="text" name="newid" value=""/><br />
+date: <input type="text" name="newdate" value="dd/mm/yyyy"/><br />
+time: <input type="text" name="newtime" value="hh:mm"/><br />
+description:<br />
+<textarea rows="12" cols="40" name="newdesc"></textarea><br /><br />
+<input type="submit" value="Post" /><br />
+</p>
+</form>
+</div>
+'''
 
 template = '''
 <form action="webevents.py" action="POST">
@@ -33,6 +50,18 @@ if 'out' in form:
 
 if rsvpname is not None and response is not None:
 	events.setattendance(rsvpevent, rsvpname, response)
+	
+if 'newid' in form:
+	events.newevent(form.getvalue('newid'))
+	newdate = form.getvalue('newdate')
+	newtime = form.getvalue('newtime')
+	newdesc = form.getvalue('newdesc')
+	if newdate is not 'dd/mm/yyyy':
+		events.setdate(newid, newdate)
+	if newtime is not 'hh:mm':
+		events.settime(newid, newtime)
+	if newdesc is not None:
+		events.setdescription(newid, newdesc)
 
 for eventid in events.listevents():
 	event = events.getevent(eventid)
@@ -56,7 +85,7 @@ for eventid in events.listevents():
 		event['out'] = event['out'][0] + " is out"
 	elif len(event['out']) > 1:
 		event['out'] = " &".join(", ".join(event['out']).rsplit(",",1)) + " are out"
-
+	
 	s += template.format(**event)
 with open('page.html') as f:
 	page = f.read()
