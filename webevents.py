@@ -52,10 +52,12 @@ if rsvpname is not None and response is not None:
 	events.setattendance(rsvpevent, rsvpname, response)
 	
 if 'newid' in form:
-	events.newevent(form.getvalue('newid'))
+	newid = form.getvalue('newid')
 	newdate = form.getvalue('newdate')
 	newtime = form.getvalue('newtime')
 	newdesc = form.getvalue('newdesc')
+
+	events.newevent(newid)
 	if newdate is not 'dd/mm/yyyy':
 		events.setdate(newid, newdate)
 	if newtime is not 'hh:mm':
