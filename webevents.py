@@ -3,12 +3,12 @@ import events
 import cgi
 
 s = '''
-<p class="icon-plus" style="float:right">
-<a href="javascript:void(0)" onclick="document.getElementById('newevent').style.display='block'">0 comments</a>
+<p style="float:right">
+<a class="icon-plus" href="javascript:void(0)" onclick="document.getElementById('newevent').style.display='block'">create event</a>
 </p>
 <div id="newevent" style="margin:1em; display:none">
 
-<form method="post" action="/blog/comment.py?id=1466320221">
+<form method="post" action="webevents.py">
 <p>
 event id: <input type="text" name="newid" value=""/><br />
 date: <input type="text" name="newdate" value="dd/mm/yyyy"/><br />
