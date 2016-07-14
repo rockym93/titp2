@@ -65,7 +65,7 @@ if 'newid' in form:
 	if newdesc is not None:
 		events.setdescription(newid, newdesc)
 
-for eventid in events.listevents():
+for eventid in sorted(events.listevents()):
 	event = events.getevent(eventid)
 	event['eventid'] = eventid
 	event['eventid'] = eventid

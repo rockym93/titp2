@@ -82,7 +82,7 @@ def settime(eventid, timestring):
 		else:
 			pm = True
 	
-	if pm and timesplit[0] is not 12:
+	if pm and timesplit[0] < 12:
 		timesplit[0] = timesplit[0] + 12
 	
 	events[eventid]['time'] = timesplit
@@ -101,7 +101,7 @@ def setdescription(eventid, description):
 	save()
 	
 def listevents():
-	return events.keys()
+	return list(events.keys())
 	
 def getevent(eventid):
 	try:
