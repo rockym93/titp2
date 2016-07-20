@@ -172,7 +172,7 @@ I am a frontend to [The Inverse Timetable Project](https://www.rockym93.net/code
 
 *Events*
 /new (eventname) creates a new event.
-/set (eventname) (time/date/description/location) (new detail to set) sets details.
+/set (eventname) (time/date/description/location/hidden/visible) (new detail to set) sets details.
 /end (eventname) removes an event.
 /list will tell you which events are coming up.
 /info (eventname) will tell you more and let you RSVP.'''
