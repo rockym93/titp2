@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-VERSION = "3.0"
+VERSION = "3.1a"
 
 import json
 import time
