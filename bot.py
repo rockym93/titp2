@@ -241,6 +241,7 @@ def setevent(message):
 	timeusage = "Time: 11am 11pm or 11:37 are all ok"
 	locusage = "Location: reply to this message with a location attachment."
 	descusage = "Description: Go nuts - but it can't be empty."
+	hideusage = "Hidden: Use 'hidden' or 'visible' to set whether the event shows in listings."
 	try:
 		eventid = t[1].lower()
 		attribute = t[2].lower()
@@ -280,6 +281,19 @@ def setevent(message):
 				'reply_to_message_id':message['message_id'],
 				'reply_markup': '{"force_reply": true, "selective": true}'
 				})
+		if attribute in 'hidden':
+			try:
+				events.setvisible(eventid, False)
+			except:
+				bot.api('sendMessage', { 'text': hideusage, 'chat_id': chat_id })
+
+		if attribute in 'visible':
+			try:
+				events.setvisible(eventid, True)
+			except:
+				bot.api('sendMessage', { 'text': hideusage, 'chat_id': chat_id })
+
+
 
 bot.commands['/set'] = setevent
 
