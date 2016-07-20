@@ -101,7 +101,11 @@ def setdescription(eventid, description):
 	save()
 	
 def listevents():
-	return list(events.keys())
+	l = []
+	for i in events.keys():
+		if events[i]['visible']:
+			l.append(i)
+	return l
 	
 def getevent(eventid):
 	try:
@@ -122,6 +126,11 @@ def setattendance(eventid, person, attending):
 			events[eventid]['in'].remove(person)
 		except ValueError:
 			pass
+	save()
+	
+def setvisible(eventid, visible):
+	if type(visible) is bool: 
+		events[eventid]['visible'] = visible
 	save()
 
 def deleteevent(eventid):
