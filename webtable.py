@@ -40,7 +40,7 @@ def generate():
 	'''Builds the timetable html for all users.'''
 	s = str()
 	s +=  '<p><a href="add.html">Add or modify availability</a></p>\n'
-	s +=  '<p>Currently tracking ' + str(len(tt['users'])) + ' people\'s availability between classes.</p>\n\n'
+	s +=  '<p>Currently tracking ' + str(len(titp.tt['users'])) + ' people\'s availability between classes.</p>\n\n'
 	s +=  '<div style="padding:1em"><table style="width:100%" border="1">\n<tr><td></td><td>Monday</td><td>Tuesday</td><td>Wednesday</td><td>Thursday</td><td>Friday</td></tr>\n'
 	
 	for h in titp.times:

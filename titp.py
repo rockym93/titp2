@@ -21,7 +21,7 @@ try:
 	with open('.timezone') as f:
 		tz = f.read().rstrip('\n')
 except IOError:
-	tz = 'UTC'ti
+	tz = 'UTC'
 
 import os
 os.environ['TZ'] = tz
