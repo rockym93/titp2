@@ -4,6 +4,8 @@ import sys
 import json
 import lazybot as bot
 
+import titp
+
 try:
 	with open('bot.json') as f:
 		config = json.load(f)

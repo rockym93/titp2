@@ -1,5 +1,5 @@
 The Inverse Timetable Project 2.0
-
+---------------------------------
 <a href="webtable.py"><span class="icon-grid"></span>&nbsp;timetable</a> &middot;
 <a href="webevents.py"><span class="icon-calendar"></span>&nbsp;events</a>
 <!--timetable-->

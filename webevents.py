@@ -52,7 +52,7 @@ if rsvpname is not None and response is not None:
 	events.setattendance(rsvpevent, rsvpname, response)
 	
 if 'newid' in form:
-	newid = form.getvalue('newid')
+	newid = form.getvalue('newid').lower()
 	newdate = form.getvalue('newdate')
 	newtime = form.getvalue('newtime')
 	newdesc = form.getvalue('newdesc')
