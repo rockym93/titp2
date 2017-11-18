@@ -308,19 +308,26 @@ def locationhandler(message):
 bot.handlers['location'] = locationhandler
 
 def listevents(message):
-	t = { 'chat_id': message['chat']['id'], 'text':"*Current events:*\n",'parse_mode':'Markdown','reply_markup': '{"hide_keyboard": true}'}
-	for i in events.listevents():
-		event = events.getevent(i)
-		#~ try:
-			#~ edate = "{}/{}/{}".format(*event['date'])
-		#~ except KeyError:
-			#~ edate = "no date set,"
-		#~ try:
-			#~ etime = "{}:{}".format(*event['time'])
-		#~ except KeyError:
-			#~ etime = "no time set"
+	t = { 'chat_id': message['chat']['id'],'text':'Current Events', 'reply_markup': '{"inline_keyboard": ['}
+	if len(events.listevents()) == 0:
+		del(t['reply_markup'])
+		t['text'] = 'Nothing scheduled.'
+	else:
+		for i in events.listevents():
+			event = events.getevent(i)
+			#~ try:
+				#~ edate = "{}/{}/{}".format(*event['date'])
+			#~ except KeyError:
+				#~ edate = "no date set,"
+			#~ try:
+				#~ etime = "{}:{}".format(*event['time'])
+			#~ except KeyError:
+				#~ etime = "no time set"
 
-		t['text'] += i + "\n"
+			t['reply_markup'] += '[{"text": "'+i+'", "callback_data": "'+i+'"}],'
+		t['reply_markup'] = t['reply_markup'].rstrip(',')
+		t['reply_markup'] += ']}'
+
 	bot.api('sendMessage', t)
 
 bot.commands['/list'] = listevents
@@ -376,7 +383,7 @@ def eventdetails(message):
 	t = { 'chat_id': message['chat']['id'], 
 	'text': detailbuilder(eventid),
 	'parse_mode':'Markdown',
-	'reply_markup': '{"inline_keyboard": [[{"text": "\\ud83d\\udc4d", "callback_data": "1 ' + eventid +'"},{"text": "\\ud83d\\udc4e", "callback_data": "0 ' + eventid +'"}]]}'}
+	'reply_markup': '{"inline_keyboard": [[{"text": "\\ud83d\\udc4d", "callback_data": "' + eventid +' 1"},{"text": "\\ud83d\\udc4e", "callback_data": "' + eventid +' 0"}]]}'}
 	bot.api('sendMessage', t)
 	
 
@@ -384,24 +391,23 @@ bot.commands['/info'] = eventdetails
 
 def attendhandler(message):
 	user = message['from']['first_name']
-	state = message['data'].split(' ')[0]
-	eventid = message['data'].split(' ')[1].lower()
+	eventid = message['data'].split(' ')[0].lower()
 	originator = message['message']
 
-	
-	print([eventid, user, state], file=sys.stderr)
-	if state == "1": 
-		events.setattendance(eventid, user, True)
+	if len(message['data'].split(' ')) == 2:
+		state = message['data'].split(' ')[1]
+		print([eventid, user, state], file=sys.stderr)
+		if state == "1": 
+			events.setattendance(eventid, user, True)
 
-	elif state == "0": 
-		events.setattendance(eventid, user, False)
+		elif state == "0": 
+			events.setattendance(eventid, user, False)
 
-	
 	e = {'chat_id':originator['chat']['id'],
 	'message_id':originator['message_id'],
 	'text': detailbuilder(eventid),
 	'parse_mode':'Markdown',
-	'reply_markup': '{"inline_keyboard": [[{"text": "\\ud83d\\udc4d", "callback_data": "1 ' + eventid +'"},{"text": "\\ud83d\\udc4e", "callback_data": "0 ' + eventid +'"}]]}'}
+	'reply_markup': '{"inline_keyboard": [[{"text": "\\ud83d\\udc4d", "callback_data": "'+ eventid +' 1"},{"text": "\\ud83d\\udc4e", "callback_data": "' + eventid +' 0"}]]}'}
 	
 	bot.api('editMessageText', e)
 		
